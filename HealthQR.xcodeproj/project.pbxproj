@@ -14,6 +14,8 @@
 		66EE0E582E017F100086567D /* HealthQRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E572E017F100086567D /* HealthQRTests.swift */; };
 		66EE0E622E017F100086567D /* HealthQRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E612E017F100086567D /* HealthQRUITests.swift */; };
 		66EE0E642E017F100086567D /* HealthQRUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E632E017F100086567D /* HealthQRUITestsLaunchTests.swift */; };
+		66EE0E732E0188B90086567D /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EE0E722E0188B90086567D /* HealthKit.framework */; };
+		66EE0E752E018DAD0086567D /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E742E018DAD0086567D /* QRScannerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6679111F2E027E76000F2ED3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		66EE0E432E017F0E0086567D /* HealthQR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthQR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EE0E462E017F0E0086567D /* HealthQRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthQRApp.swift; sourceTree = "<group>"; };
 		66EE0E482E017F0E0086567D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +47,9 @@
 		66EE0E5D2E017F100086567D /* HealthQRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HealthQRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EE0E612E017F100086567D /* HealthQRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthQRUITests.swift; sourceTree = "<group>"; };
 		66EE0E632E017F100086567D /* HealthQRUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthQRUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		66EE0E702E0188B90086567D /* HealthQR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HealthQR.entitlements; sourceTree = "<group>"; };
+		66EE0E722E0188B90086567D /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		66EE0E742E018DAD0086567D /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66EE0E732E0188B90086567D /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,7 @@
 				66EE0E562E017F100086567D /* HealthQRTests */,
 				66EE0E602E017F100086567D /* HealthQRUITests */,
 				66EE0E442E017F0E0086567D /* Products */,
+				66EE0E712E0188B90086567D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,10 +102,13 @@
 		66EE0E452E017F0E0086567D /* HealthQR */ = {
 			isa = PBXGroup;
 			children = (
+				6679111F2E027E76000F2ED3 /* Info.plist */,
+				66EE0E702E0188B90086567D /* HealthQR.entitlements */,
 				66EE0E462E017F0E0086567D /* HealthQRApp.swift */,
 				66EE0E482E017F0E0086567D /* ContentView.swift */,
 				66EE0E4A2E017F100086567D /* Assets.xcassets */,
 				66EE0E4C2E017F100086567D /* Preview Content */,
+				66EE0E742E018DAD0086567D /* QRScannerView.swift */,
 			);
 			path = HealthQR;
 			sourceTree = "<group>";
@@ -125,6 +136,14 @@
 				66EE0E632E017F100086567D /* HealthQRUITestsLaunchTests.swift */,
 			);
 			path = HealthQRUITests;
+			sourceTree = "<group>";
+		};
+		66EE0E712E0188B90086567D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66EE0E722E0188B90086567D /* HealthKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66EE0E492E017F0E0086567D /* ContentView.swift in Sources */,
+				66EE0E752E018DAD0086567D /* QRScannerView.swift in Sources */,
 				66EE0E472E017F0E0086567D /* HealthQRApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,7 +366,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -401,7 +421,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -416,11 +436,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HealthQR/HealthQR.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HealthQR/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HealthQR/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -444,11 +466,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HealthQR/HealthQR.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HealthQR/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HealthQR/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

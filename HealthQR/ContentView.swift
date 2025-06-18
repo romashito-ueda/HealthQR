@@ -1,21 +1,23 @@
-//
-//  ContentView.swift
-//  HealthQR
-//
-//  Created by r0n on 2025/06/17.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Hello, world!")
-            .padding()
-    }
-}
+    @State private var scannedCode: String?
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    var body: some View {
+        VStack {
+            QRScannerView(scannedCode: $scannedCode)
+                .frame(height: 400)
+
+            if let code = scannedCode {
+                Text("Scanned:\n\(code)")
+                    .padding()
+                    .foregroundColor(.green)
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+            } else {
+                Text("QRコードを読み取ってください")
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
     }
 }

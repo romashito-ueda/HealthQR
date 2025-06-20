@@ -1,5 +1,4 @@
-import SwiftUI
-
+import SwiftUICore
 struct ContentView: View {
     @State private var scannedCode: String?
 
@@ -9,15 +8,14 @@ struct ContentView: View {
                 .frame(height: 400)
 
             if let code = scannedCode {
-                Text("Scanned:\n\(code)")
+                Text("読み取った内容: \(code)")
                     .padding()
                     .foregroundColor(.green)
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
             } else {
                 Text("QRコードを読み取ってください")
+                    .padding()
                     .foregroundColor(.gray)
             }
         }
-        .padding()
     }
 }

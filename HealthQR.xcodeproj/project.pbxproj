@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		66AB83602E05D80C006F5B21 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB835F2E05D80C006F5B21 /* ResultView.swift */; };
 		66AB83622E05D84F006F5B21 /* MeasureKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB83612E05D84F006F5B21 /* MeasureKey.swift */; };
+		66AB83642E064E31006F5B21 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AB83632E064E31006F5B21 /* HealthKitManager.swift */; };
 		66EE0E472E017F0E0086567D /* HealthQRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E462E017F0E0086567D /* HealthQRApp.swift */; };
 		66EE0E492E017F0E0086567D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE0E482E017F0E0086567D /* ContentView.swift */; };
 		66EE0E4B2E017F100086567D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66EE0E4A2E017F100086567D /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		6679111F2E027E76000F2ED3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		66AB835F2E05D80C006F5B21 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		66AB83612E05D84F006F5B21 /* MeasureKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureKey.swift; sourceTree = "<group>"; };
+		66AB83632E064E31006F5B21 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		66EE0E432E017F0E0086567D /* HealthQR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthQR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EE0E462E017F0E0086567D /* HealthQRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthQRApp.swift; sourceTree = "<group>"; };
 		66EE0E482E017F0E0086567D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		66EE0E452E017F0E0086567D /* HealthQR */ = {
 			isa = PBXGroup;
 			children = (
+				66AB83632E064E31006F5B21 /* HealthKitManager.swift */,
 				66AB83612E05D84F006F5B21 /* MeasureKey.swift */,
 				66AB835F2E05D80C006F5B21 /* ResultView.swift */,
 				6679111F2E027E76000F2ED3 /* Info.plist */,
@@ -269,6 +272,7 @@
 			files = (
 				66EE0E492E017F0E0086567D /* ContentView.swift in Sources */,
 				66AB83602E05D80C006F5B21 /* ResultView.swift in Sources */,
+				66AB83642E064E31006F5B21 /* HealthKitManager.swift in Sources */,
 				66EE0E752E018DAD0086567D /* QRScannerView.swift in Sources */,
 				66AB83622E05D84F006F5B21 /* MeasureKey.swift in Sources */,
 				66EE0E472E017F0E0086567D /* HealthQRApp.swift in Sources */,

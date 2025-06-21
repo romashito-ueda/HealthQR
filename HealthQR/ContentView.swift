@@ -3,9 +3,10 @@ import HealthKit
 
 struct ContentView: View {
     @State private var scannedCode: String?
-    @State private var parsedData: [(MeasureInfo, String)] = []
-    @State private var showResultView = false
-    @State private var alertMessage: String?
+    @State private var parsedRows: [(MeasureInfo,String)] = []
+    @State private var parsedDict: [String:String] = [:]
+    @State private var showResult = false
+    @State private var toast: String?
 
     var body: some View {
         NavigationStack {
@@ -16,46 +17,42 @@ struct ContentView: View {
                 Text("QRコードをタップで読み取ってください")
                     .foregroundColor(.gray)
             }
-            .onChange(of: scannedCode) { _, newValue in
-                guard let code = newValue else { return }
-
-                // 1) パース
-                parsedData = parsePayload(code)
-
-                // 2) HealthKit 保存（非同期）
-                let dict = Dictionary(uniqueKeysWithValues:
-                                      parsedData.map { ($0.0.label, $0.1) })
-                Task {
-                    try? await HealthKitManager.shared.save(dict: dict)
+            .onChange(of: scannedCode) { _, newVal in
+                guard let code = newVal else { return }
+                parsedDict  = parseDict(code)
+                parsedRows  = convertToRows(parsedDict)
+                showResult  = true
+            }
+            .navigationDestination(isPresented: $showResult) {
+                ResultView(rows: parsedRows, parsedDict: parsedDict)
+            }
+            .overlay(alignment: .top) {
+                if let t = toast {
+                    Text(t)
+                        .padding(10)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now()+1.5) { toast = nil }
+                        }
+                        .transition(.move(edge: .top).combined(with: .opacity))
                 }
-
-                // 3) 遷移
-                alertMessage  = "読み取り成功: \(code.prefix(30))..."
-                showResultView = true
             }
-            .navigationDestination(isPresented: $showResultView) {
-                ResultView(rows: parsedData)
-            }
-            .alert("Scan",
-                   isPresented: .constant(alertMessage != nil),
-                   actions: { Button("OK") { alertMessage = nil } },
-                   message: { Text(alertMessage ?? "") })
         }
-        // 権限ダイアログは画面初回表示時に1回だけ
-        .task {
-            HealthKitManager.shared.requestAuth()
-        }
+        .task { HealthKitManager.shared.requestAuth() }
     }
 
-    private func parsePayload(_ payload: String) -> [(MeasureInfo, String)] {
-        payload
-            .split(separator: "&")
-            .compactMap { pair -> (MeasureInfo, String)? in
-                let parts = pair.split(separator: "=", maxSplits: 1).map(String.init)
-                guard parts.count == 2,
-                      let keyEnum = MeasureKey(rawValue: parts[0]),
-                      let info    = measureMap[keyEnum] else { return nil }
-                return (info, parts[1])
-            }
+    // ---------- Parser ----------
+    private func parseDict(_ text: String) -> [String:String] {
+        Dictionary(uniqueKeysWithValues:
+            text.split(separator:"&").compactMap {
+                let p = $0.split(separator:"=",maxSplits:1).map(String.init)
+                return p.count == 2 ? (p[0], p[1]) : nil
+            })
+    }
+    private func convertToRows(_ dict: [String:String]) -> [(MeasureInfo,String)] {
+        dict.compactMap { k,v in
+            guard let m = MeasureKey(rawValue: k), let info = measureMap[m] else { return nil }
+            return (info, v)
+        }
     }
 }

@@ -5,51 +5,72 @@ final class HealthKitManager {
     private let store = HKHealthStore()
     private init() {}
 
+    /// 追加タイプをすべて権限リクエスト
     func requestAuth() {
-        let types: Set = [
-            HKObjectType.quantityType(forIdentifier: .bodyMass)!,
-            HKObjectType.quantityType(forIdentifier: .bodyFatPercentage)!
+        let identifiers: [HKQuantityTypeIdentifier] = [
+            .bodyMass, .bodyFatPercentage, .bodyMassIndex,
+            .height, .leanBodyMass, .basalEnergyBurned
         ]
+        let types = Set(identifiers.compactMap { HKObjectType.quantityType(forIdentifier: $0) })
         store.requestAuthorization(toShare: types, read: []) { _, _ in }
     }
 
-    /// dict は QR からパースした [Key:Value] そのまま
+    /// QR辞書を全項目保存 (存在する値だけ)
     func save(dict: [String:String]) async throws {
-        // 1️⃣ 測定日時を組み立てる（失敗したら now）
-        let measurementDate: Date = {
-            guard
-                let yStr = dict["SY"], let mStr = dict["SM"], let dStr = dict["SD"],
-                let y = Int(yStr), let m = Int(mStr), let d = Int(dStr)
-            else { return Date() }
+        let date = makeDate(dict)   // 測定 SY/SM/SD → Date
+        try await withThrowingTaskGroup(of: Void.self) { g in
 
-            var comps = DateComponents()
-            comps.calendar = Calendar.current
-            comps.year  = y
-            comps.month = m
-            comps.day   = d
-            comps.hour  = 12   // 時刻がないので正午で固定（任意）
-            return comps.date ?? Date()
-        }()
-
-        // 2️⃣ 保存タスクをグループで並列に
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            if let v = Double(dict["WT"] ?? "") {
-                let qty = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: v)
-                let sample = HKQuantitySample(
-                    type: .quantityType(forIdentifier: .bodyMass)!,
-                    quantity: qty, start: measurementDate, end: measurementDate)
-                group.addTask { try await self.store.save(sample) }
+            // 体重 WT
+            if let v = double(dict["WT"]) {
+                g.addTask { try await self.saveQuantity(.bodyMass, v, .gramUnit(with: .kilo), date) }
             }
-
-            if let v = Double(dict["BP"] ?? "") {
-                let qty = HKQuantity(unit: .percent(), doubleValue: v / 100.0)
-                let sample = HKQuantitySample(
-                    type: .quantityType(forIdentifier: .bodyFatPercentage)!,
-                    quantity: qty, start: measurementDate, end: measurementDate)
-                group.addTask { try await self.store.save(sample) }
+            // 体脂肪率 BP
+            if let v = double(dict["BP"]) {
+                g.addTask { try await self.saveQuantity(.bodyFatPercentage, v/100, .percent(), date) }
             }
+            // BMI
+            if let v = double(dict["BI"]) {
+                g.addTask { try await self.saveQuantity(.bodyMassIndex, v, .count(), date) }
+            }
+            // 身長 HI
+            if let v = double(dict["HI"]) {
+                g.addTask { try await self.saveQuantity(.height, v/100, .meter(), date) }
+            }
+            // 骨格筋量 WX → LeanBodyMass
+            if let v = double(dict["WX"]) {
+                g.addTask { try await self.saveQuantity(.leanBodyMass, v, .gramUnit(with: .kilo), date) }
+            }
+            // 体水分量 WV
 
-            try await group.waitForAll()
+            // 基礎代謝量 BL (kcal)
+            if let v = double(dict["BL"]) {
+                g.addTask { try await self.saveQuantity(.basalEnergyBurned, v, .kilocalorie(), date) }
+            }
+            try await g.waitForAll()
         }
+    }
+
+    // ---------- private helpers ----------
+    private func saveQuantity(_ id: HKQuantityTypeIdentifier,
+                              _ value: Double,
+                              _ unit: HKUnit,
+                              _ date: Date) async throws {
+        guard let type = HKObjectType.quantityType(forIdentifier: id) else { return }
+        let qty = HKQuantity(unit: unit, doubleValue: value)
+        let sample = HKQuantitySample(type: type, quantity: qty, start: date, end: date)
+        try await store.save(sample)
+    }
+
+    private func double(_ str: String?) -> Double? { str.flatMap(Double.init) }
+
+    private func makeDate(_ dict:[String:String]) -> Date {
+        guard
+            let y = Int(dict["SY"] ?? ""),
+            let m = Int(dict["SM"] ?? ""),
+            let d = Int(dict["SD"] ?? "")
+        else { return Date() }
+        var c = DateComponents(); c.calendar = .current
+        c.year = y; c.month = m; c.day = d; c.hour = 12
+        return c.date ?? Date()
     }
 }

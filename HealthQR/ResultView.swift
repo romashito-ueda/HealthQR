@@ -1,32 +1,52 @@
 import SwiftUI
 
 struct ResultView: View {
-    let rows: [(MeasureInfo, String)]
+    let rows: [(MeasureInfo,String)]
+    let parsedDict: [String:String]
 
-    // 親画面からバインディングで受け取る「再スキャン要求」
-    @Environment(\.dismiss) private var dismiss   // ← NavigationStack を閉じるだけならこれで十分
+    @Environment(\.dismiss) private var dismiss
+    @State private var toast = false
 
     var body: some View {
         VStack {
-            // ---- 既存の一覧 ----
             List {
-                ForEach(Array(rows.enumerated()), id: \.0) { _, row in
+                ForEach(Array(rows.enumerated()), id:\.0) { _, row in
                     HStack {
                         Text(row.0.label)
                         Spacer()
-                        Text("\(row.1) \(row.0.unit)")
-                            .bold()
+                        Text("\(row.1) \(row.0.unit)").bold()
                     }
                 }
             }
 
-            // ---- 追加した再スキャンボタン ----
-            Button("もう一度スキャン") {
-                dismiss()   // NavigationStack の前の画面に戻る
+            HStack {
+                Button("もう一度スキャン") { dismiss() }
+                    .buttonStyle(.bordered)
+
+                Spacer()
+
+                Button("連携する") {
+                    Task {
+                        try? await HealthKitManager.shared.save(dict: parsedDict)
+                        toast = true
+                    }
+                }
+                .buttonStyle(.borderedProminent)
             }
-            .buttonStyle(.borderedProminent)
-            .padding(.bottom, 16)
+            .padding(.horizontal)
         }
         .navigationTitle("測定結果")
+        .overlay(alignment: .top) {
+            if toast {
+                Text("HealthKit に保存しました 🎉")
+                    .padding(10)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline:.now()+1.5){ toast = false }
+                    }
+                    .transition(.move(edge:.top).combined(with:.opacity))
+            }
+        }
+        .animation(.easeInOut, value: toast)
     }
 }
